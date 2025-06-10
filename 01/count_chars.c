@@ -1,13 +1,20 @@
 #include <stdio.h>
-char *func(void);
+
+int global_int;
 
 int main(void) {
-    char *s3 = func();
-    printf("%s\n", s3);
+    char input = getchar();
 
-}
+    int count = 0;
 
-char *func() {
-    char s2[] = "abc";
-    return s2;
+    while (input != EOF) {
+        if (input != '\n') {
+            count++;
+        }
+        input = getchar();
+    }
+
+    printf("number of characters: %d\n", count);
+
+    return 0;
 }

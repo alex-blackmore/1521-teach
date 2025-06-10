@@ -13,6 +13,10 @@ int main(int argc, char *argv[]) {
         return 0;
 }
 
+// sum(0) = 0 
+// sum(n) = n + sum(n - 1)
+
+
 int sum(int n) {
     if (n == 0) {
         return 0;
