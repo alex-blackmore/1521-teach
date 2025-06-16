@@ -1,31 +1,31 @@
 	.text
 main:
+	
 	li	$v0, 4
 	la	$a0, prompt_str
 	syscall
 
 	li	$v0, 5
 	syscall
+	move	$t0, $v0 # x in $t0
 
-	move	$t0, $v0
-
-check_cond1:
-	bgt	$t0, 100, check_cond2
-	b	condition_false
-check_cond2:
-	blt	$t0, 1000, condition_true
-	b	condition_false
-condition_true:
+main__x_cond1:
+	bgt	$t0, 100, main__x_cond2
+	b	main__x_cond_false
+main__x_cond2:
+	blt	$t0, 1000, main__x_cond_true
+	b	main__x_cond_false
+main__x_cond_true:
+	li	$v0, 4
 	la	$a0, medium_str
-	li	$v0, 4
 	syscall
-
-	b	condition_end
-condition_false:
+	b	main__x_end
+main__x_cond_false:
+	li	$v0, 4
 	la	$a0, small_big_str
-	li	$v0, 4
 	syscall
-condition_end:
+main__x_end:
+
 	li	$v0, 0
 	jr	$ra
 
