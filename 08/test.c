@@ -1,33 +1,89 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 int main(void) {
-    FILE *fp = fopen("test.txt", "w");
+    FILE *dave = fopen("test.txt", "r");
     
-    if (fp == NULL) {
-        perror("fopen (main)");
-        exit(1);
+    int byte = fgetc(dave);
+    while (byte != EOF) {
+        printf("'%c'\n", byte);
+        byte = fgetc(dave);
+    }
+   
+    fclose(dave);
+
+    FILE *jake = fopen("test.txt", "r");
+
+    char buffer[1024];
+    
+    while (fgets(buffer, 1024, jake) != NULL) {
+        printf("%s", buffer);
     }
 
-    char buffer[] = {'a', 'b', 'c', 'd', '\n'};
+    fclose(jake);
 
-    fwrite(buffer, 1, 5, fp);
+    FILE *fp = fopen("test.txt", "w");
 
-    fprintf(fp, "I LOVE MIPS\n");
+    char buffer[] = {'a', 'b', 'c', 'd'};
 
-    ssize_t offset = ftell(fp);
-
-    printf("offset: %ld\n", offset);
-
-    if (fseek(fp, -5, SEEK_END) != 0) {
-        perror("fseek");
+    for (int i = 0; i < 4; i++) {
+        fputc(buffer[i], fp);
     }
-
-    offset = ftell(fp);
-
-    printf("offset: %ld\n", offset);
 
     fclose(fp);
+
+    FILE *aaron = fopen("t.txt", "r");
+
+    if (aaron == NULL) {
+        // fopen failed
+        fprintf(stderr, "failed to open aaron!\n"); // custom error
+        perror("fopen"); // system error
+        exit(1); // terminate the program with status 1
+    }
+
+    fprintf(aaron, "%d + %d = %d\n", 1521, 1, 1522);
+
+    fclose(aaron);
+
+
+    printf("hi!\n");
+    fprintf(stdout, "hi!\n");
+    fprintf(stderr, "bye!\n");
+
+
+    FILE *mips = fopen("test.txt", "r");
+    char buf[1024];
+    fgets(buf, 1024, mips);
+
+    // where is the offset?
+    long offset = ftell(mips);
+
+    printf("offset: %ld\n", offset);
+
+    // skip over "I LOVE"
+    fseek(mips, 7, SEEK_CUR); // seek relative to current offset
+
+
+    offset = ftell(mips);
+
+    printf("new offset: %ld\n", offset);
+
+    fgets(buf, 1024, mips);
+    printf("%s", buf);
+
+    fseek(mips, 12, SEEK_SET); // seek relative to beginning
+    
+    printf("new SEEK_SET offset: %ld\n", offset);
+
+    fgets(buf, 1024, mips);
+    printf("%s", buf);
+
+    fseek(mips, -5, SEEK_END);
+    printf("new SEEK_END offset: %ld\n", offset);
+
+    fgets(buf, 1024, mips);
+    printf("%s", buf);
 
     return 0;
 }
